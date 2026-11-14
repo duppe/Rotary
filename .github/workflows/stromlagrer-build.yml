@@ -30,8 +30,11 @@ jobs:
           mkdir -p work/project
           cat strom-build/chunk00a.txt strom-build/chunk00b.txt strom-build/chunk00c.txt strom-build/chunk00d.txt strom-build/chunk00e.txt strom-build/chunk01.txt strom-build/chunk02.txt strom-build/chunk03.txt | base64 -d > work/src.tgz
           tar -xzf work/src.tgz -C work/project
+          cp strom-build/BrowserActivity.java work/project/app/src/main/java/no/haavald/streamsaver/BrowserActivity.java
+          python3 strom-build/patch_v105.py work/project
           grep -R "Slett historikk" -n work/project/app/src/main/java
-          grep -R "By Duppe · v1.0.4" -n work/project/app/src/main/java
+          grep -R "By Duppe · v1.0.5" -n work/project/app/src/main/java
+          grep -R "Åpne nettside og velg strøm" -n work/project/app/src/main/java
 
       - name: Ensure Android SDK 36
         shell: bash
@@ -44,17 +47,11 @@ jobs:
 
       - name: Rename APK
         shell: bash
-        run: cp work/project/app/build/outputs/apk/debug/app-debug.apk work/StromLagrer-1.0.4.apk
+        run: cp work/project/app/build/outputs/apk/debug/app-debug.apk work/StromLagrer-1.0.5.apk
 
-      - name: Preserve signing key
-        shell: bash
-        run: cp "$HOME/.android/debug.keystore" work/StromLagrer-signing-key.keystore
-
-      - name: Upload APK and signing key
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: StromLagrer-1.0.4-final
-          path: |
-            work/StromLagrer-1.0.4.apk
-            work/StromLagrer-signing-key.keystore
+          name: StromLagrer-1.0.5-apk
+          path: work/StromLagrer-1.0.5.apk
           if-no-files-found: error
