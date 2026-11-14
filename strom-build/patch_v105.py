@@ -104,7 +104,7 @@ s=s.replace('''    public interface Listener {
         public static RequestContext empty() { return new RequestContext("", "", "", ""); }
         private static String cleanHeader(String value) {
             if (value == null) return "";
-            return value.replace("\r", "").replace("\n", "").trim();
+            return value.replace("\\r", "").replace("\\n", "").trim();
         }
     }
 ''')
